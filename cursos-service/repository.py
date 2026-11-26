@@ -51,7 +51,7 @@ class CursoRepository:
         conn = self.db.get_connection()
         cursor = conn.cursor()
         try:
-            cursor.callproc("sp_actualizar_curso", [curso_id, data.nombre, data.creditos, data.docente])
+            cursor.callproc("sp_actualizar_curso", [curso_id, data.codigo, data.nombre, data.creditos, data.docente])
             afectados = 0
             for result in cursor.stored_results():
                 row = result.fetchone()

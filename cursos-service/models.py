@@ -7,6 +7,7 @@ class CursoCreate(BaseModel):
     docente: str = Field(..., min_length=3, max_length=120)
 
 class CursoUpdate(BaseModel):
+    codigo: str = Field(..., min_length=3, max_length=20)
     nombre: str = Field(..., min_length=3, max_length=120)
     creditos: int = Field(..., ge=1, le=10)
     docente: str = Field(..., min_length=3, max_length=120)

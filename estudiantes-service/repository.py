@@ -54,7 +54,7 @@ class EstudianteRepository:
         cursor = conn.cursor()
         try:
             cursor.callproc("sp_actualizar_estudiante", [
-                estudiante_id, data.nombres, data.apellidos, data.correo, data.carrera
+                estudiante_id, data.codigo, data.nombres, data.apellidos, data.correo, data.carrera
             ])
             afectados = 0
             for result in cursor.stored_results():

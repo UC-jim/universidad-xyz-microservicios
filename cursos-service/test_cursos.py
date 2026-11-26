@@ -1,11 +1,21 @@
-﻿from fastapi.testclient import TestClient
-from main import app
+﻿import sys, os, importlib.util
+from fastapi.testclient import TestClient
 
-client = TestClient(app)
+SERVICE_DIR = os.path.dirname(os.path.abspath(__file__))
+for mod in ["main", "repository", "models", "database"]:
+    sys.modules.pop(mod, None)
+if SERVICE_DIR not in sys.path:
+    sys.path.insert(0, SERVICE_DIR)
+
+spec = importlib.util.spec_from_file_location("cur_main", os.path.join(SERVICE_DIR, "main.py"))
+cur_main = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(cur_main)
+
+client = TestClient(cur_main.app)
 
 def test_crud_completo_curso():
     payload = {
-        "codigo": "CUR999",
+        "codigo": f"CUR{os.getpid()}",
         "nombre": "Arquitectura de Microservicios",
         "creditos": 4,
         "docente": "Dr. Carlos Mendoza"
@@ -16,9 +26,10 @@ def test_crud_completo_curso():
 
     res_get = client.get(f"/cursos/{curso_id}")
     assert res_get.status_code == 200
-    assert res_get.json()["codigo"] == "CUR999"
+    assert res_get.json()["codigo"] == f"CUR{os.getpid()}"
 
     res_put = client.put(f"/cursos/{curso_id}", json={
+        "codigo": f"CUR{os.getpid()}",
         "nombre": "Arquitectura de Software Avanzada",
         "creditos": 4,
         "docente": "Dr. Carlos Mendoza"

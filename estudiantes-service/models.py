@@ -8,6 +8,7 @@ class EstudianteCreate(BaseModel):
     carrera: str = Field(..., min_length=3, max_length=100)
 
 class EstudianteUpdate(BaseModel):
+    codigo: str = Field(..., min_length=3, max_length=20)
     nombres: str = Field(..., min_length=2, max_length=100)
     apellidos: str = Field(..., min_length=2, max_length=100)
     correo: EmailStr
